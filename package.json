@@ -12,6 +12,9 @@
   },
   "devDependencies": {
     "@wdio/cli": "^9.6.0",
-    "appium": "^2.15.0"
+    "@wdio/cucumber-framework": "^9.6.4",
+    "@wdio/mocha-framework": "^9.6.4",
+    "appium": "^2.15.0",
+    "appium-uiautomator2-driver": "^3.10.0"
   }
 }
