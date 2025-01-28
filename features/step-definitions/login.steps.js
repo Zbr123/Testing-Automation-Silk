@@ -15,8 +15,8 @@ When('I click on Phone Number button', async () => {
     await loginPage.clickPhoneNoButton();
 });
 
-Then('I should see Welcome Back screen', async () => {
-    await loginPage.assertWelcomeTextDisplayed();
+Then('I should see Phone No field', async () => {
+    await loginPage.assertPhoneField();
 });
 
 When('I click on Phone No field', async () => {

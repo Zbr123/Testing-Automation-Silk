@@ -5,7 +5,7 @@ Feature: Login Functionality
     Given I am on the login page
     When I click on Eng button
     And I click on Phone Number button
-    # Then I should see Welcome Back screen
+    Then I should see Phone No field
     When I click on Phone No field
     And I enter the phone number '591708260'
     And I click on the password field

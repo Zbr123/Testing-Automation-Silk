@@ -19,16 +19,9 @@ class LoginPage extends BasePage {
         console.log('Clicked on the Phone Number button.');
     }
 
-    async assertWelcomeTextDisplayed() {
-        const welcomeText = await $('//android.widget.TextView[@resource-id="kc-page-title"]');
-        await expect(welcomeText).toBeDisplayed();
-        console.log('Welcome Back screen is displayed.');
-    }
-
-    async assertPhoneFieldDisplayed() {
+    async assertPhoneField() {
         const phoneField = await $('//android.widget.EditText[@resource-id="fldFrmTel"]');
         await expect(phoneField).toBeDisplayed();
-        console.log('Phone number field is displayed.');
     }
 
     async clickPhoneField() {
