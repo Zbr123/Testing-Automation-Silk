@@ -1,0 +1,32 @@
+name: Run WebDriverIO Automation Tests
+
+on:
+  schedule:
+    - cron: '0 23 * * *' # Runs at 11 PM UTC daily
+  workflow_dispatch: # Allows manual execution
+
+jobs:
+  run-automation-tests:
+    runs-on: ubuntu-latest # Use Ubuntu as the runner
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔄 Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18 # Use Node.js 18 or match your local version
+
+      - name: 📦 Install Dependencies
+        run: npm install # Installs all required dependencies
+
+      - name: 🚀 Run WebDriverIO Tests
+        run: |
+          set DEBUG=qase* && npx wdio wdio.conf.js
+
+      - name: 📤 Upload Test Reports (Optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: ./reports # Adjust if you have a reports directory
