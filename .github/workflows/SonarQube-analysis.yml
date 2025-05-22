@@ -21,16 +21,22 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1
+      - name: Install SonarScanner CLI
+        run: |
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          unzip sonar-scanner-cli-4.8.0.2856-linux.zip
+          echo "$PWD/sonar-scanner-4.8.0.2856-linux/bin" >> $GITHUB_PATH
+          sonar-scanner --version
+
+      - name: Run SonarScanner
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_SCANNER_JRE: ${{ runner.temp }}/jdk-17
-        with:
-          args: >
-            -Dsonar.organization=zbr123
-            -Dsonar.projectKey=Zbr123_Testing-Automation-Silk
-            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
-            -Dsonar.pullrequest.branch=${{ github.head_ref }}
-            -Dsonar.pullrequest.base=${{ github.base_ref }}
+        run: |
+          sonar-scanner \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.organization=zbr123 \
+            -Dsonar.projectKey=Zbr123_Testing-Automation-Silk \
+            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
+            -Dsonar.pullrequest.branch=${{ github.head_ref }} \
+            -Dsonar.pullrequest.base=${{ github.base_ref }} \
             -Dsonar.pullrequest.provider=GitHub
