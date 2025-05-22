@@ -1,9 +1,9 @@
-name: SonarQube PR Analysis
+name: SonarCloud PR Analysis
 
 on:
   pull_request:
     branches:
-      - main   # Your main branch name here
+      - main  # Target branch for PRs
 
 jobs:
   sonarqube:
@@ -11,17 +11,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Needed for accurate analysis
+          fetch-depth: 0  # needed for SonarCloud
 
-      - name: Set up JDK (if needed)
-        uses: actions/setup-java@v2
+      - name: Set up JDK (if your project needs Java)
+        uses: actions/setup-java@v3
         with:
-          java-version: '11'  # Adjust if your project uses Java
+          distribution: 'temurin'
+          java-version: '11'
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v1.9.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
@@ -31,4 +32,3 @@ jobs:
             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
             -Dsonar.pullrequest.branch=${{ github.head_ref }}
             -Dsonar.pullrequest.base=${{ github.base_ref }}
-            -Dsonar.pullrequest.provider=GitHub
