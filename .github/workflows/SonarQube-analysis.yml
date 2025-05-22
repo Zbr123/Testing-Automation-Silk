@@ -21,10 +21,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install SonarScanner CLI
+      - name: Install unzip (if missing)
+        run: sudo apt-get update && sudo apt-get install -y unzip
+
+      - name: Download and install SonarScanner CLI
         run: |
-          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
-          unzip sonar-scanner-cli-4.8.0.2856-linux.zip
+          curl -L --retry 3 --retry-delay 5 --retry-max-time 40 \
+            -o sonar-scanner-cli.zip \
+            https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          unzip sonar-scanner-cli.zip
+          ls -la sonar-scanner-4.8.0.2856-linux
           echo "$PWD/sonar-scanner-4.8.0.2856-linux/bin" >> $GITHUB_PATH
           sonar-scanner --version
 
