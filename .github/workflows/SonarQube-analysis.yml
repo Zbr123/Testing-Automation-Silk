@@ -3,7 +3,7 @@ name: SonarCloud PR Analysis
 on:
   pull_request:
     branches:
-      - main   # Target branch for PRs
+      - main
 
 jobs:
   sonarqube:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # needed for SonarCloud
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -21,13 +21,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Check Java version
-        run: java -version
-
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_SCANNER_JRE: ${{ runner.temp }}/jdk-17
         with:
           args: >
             -Dsonar.organization=zbr123
