@@ -30,8 +30,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=your_org_key
-            -Dsonar.projectKey=your_project_key
+            -Dsonar.organization=zbr123
+            -Dsonar.projectKey=Zbr123_Testing-Automation-Silk
             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
             -Dsonar.pullrequest.branch=${{ github.head_ref }}
             -Dsonar.pullrequest.base=${{ github.base_ref }}
