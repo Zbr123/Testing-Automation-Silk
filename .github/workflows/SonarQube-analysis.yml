@@ -4,7 +4,13 @@ on:
   pull_request:
     branches:
       - main
-      - webdriver-CICD  # add other target branches if needed
+      - webdriver-CICD
+      - webdriver-browserstack
+      - webdriver-Qase.io
+
+  push:
+    branches:
+      - webdriver-CICD
       - webdriver-browserstack
       - webdriver-Qase.io
 
@@ -32,7 +38,7 @@ jobs:
           args: >
             -Dsonar.organization=zbr123
             -Dsonar.projectKey=Zbr123_Testing-Automation-Silk
-            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
-            -Dsonar.pullrequest.branch=${{ github.head_ref }}
-            -Dsonar.pullrequest.base=${{ github.base_ref }}
-            -Dsonar.pullrequest.provider=GitHub
+            ${{ github.event_name == 'pull_request' && format('-Dsonar.pullrequest.key=%d -Dsonar.pullrequest.branch=%s -Dsonar.pullrequest.base=%s -Dsonar.pullrequest.provider=GitHub',
+                github.event.pull_request.number,
+                github.head_ref,
+                github.base_ref) || '' }}
