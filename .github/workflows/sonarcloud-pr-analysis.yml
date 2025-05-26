@@ -3,7 +3,7 @@ name: SonarCloud PR Analysis
 on:
   pull_request:
     branches:
-      - main # Specify your target branch here (e.g., main, develop, etc.)
+      - main
       - webdriver-CICD
       - webdriver-browserstack
       - webdriver-BDD
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # To ensure the entire history is available for accurate analysis
+          fetch-depth: 0  # Ensures full git history for accurate analysis
 
       # Step 2: Set up JDK 17
       - name: Set up JDK 17
@@ -27,16 +27,24 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Step 3: Run SonarCloud scan
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1
+      # Step 3: Install SonarScanner CLI
+      - name: Install SonarScanner CLI
+        run: |
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner.zip -d $HOME
+          echo "$HOME/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
+
+      # Step 4: Run SonarCloud Scan
+      - name: Run SonarCloud Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.organization=Zbr123_Testing-Automation-Silk
-            -Dsonar.projectKey=zbr123
-            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
-            -Dsonar.pullrequest.branch=${{ github.head_ref }}
-            -Dsonar.pullrequest.base=${{ github.base_ref }}
+        run: |
+          sonar-scanner \
+            -Dsonar.organization=zbr123 \
+            -Dsonar.projectKey=Zbr123_Testing-Automation-Silk \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${SONAR_TOKEN} \
+            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
+            -Dsonar.pullrequest.branch=${{ github.head_ref }} \
+            -Dsonar.pullrequest.base=${{ github.base_ref }} \
             -Dsonar.pullrequest.provider=GitHub
